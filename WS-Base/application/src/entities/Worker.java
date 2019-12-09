@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import entities.enums.WorkerLevel;
@@ -73,10 +74,41 @@ public class Worker {
 		return contracts;
 	}
 
-	public void setContracts(List<HourContract> contracts) {
-		this.contracts = contracts;
-	}
+	/*
+	 * A lista está sendo alterada por meio de métodos, ou seja, será alterada
+	 * apenas pelos mesmos:
+	 * 
+	 * public void setContracts(List<HourContract> contracts) 
+	 * { this.contracts = contracts; }
+	 * 
+	 */
 	// ----------------------------------------------------------------------- >
-	
+	// --- > Métodos da classe:
 
+	public void addContract(HourContract contract) {
+		// por se tratar de uma lista é executado o comando de adicionar na lista:
+		contracts.add(contract);
+	}
+
+	public void removerContract(HourContract contract) {
+		// por se tratar de uma lista é executado o comando de remover na lista:
+		contracts.remove(contract);
+	}
+
+	public double income(int year, int month) {
+		double sum = baseSalary;
+		// Instanciar o calendário:
+		Calendar cal = Calendar.getInstance();
+
+		for (HourContract c : contracts) {
+			cal.setTime(c.getDate());
+			int c_year = cal.get(Calendar.YEAR);
+			int c_month = cal.get(Calendar.MONTH);
+			if (c_year == year && c_month == month) {
+				sum += c.totalValue();
+			}
+
+		}
+		return sum;
+	}
 }
