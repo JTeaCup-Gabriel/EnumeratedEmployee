@@ -1,23 +1,25 @@
 package application;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
 
 import entities.Department;
+import entities.HourContract;
 import entities.Worker;
 import entities.enums.WorkerLevel;
 
-
 public class Program {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
 		// -------------------------------------------------------------------- >
 		System.out.print("Enter department's name: ");
 		String departmentName = sc.nextLine();
@@ -33,8 +35,12 @@ public class Program {
 		System.out.print("Base salary: ");
 		double baseSalary = sc.nextDouble();
 		// instanciamento do funcionário que vai receber os atributos
-		Worker worker = new Worker(workerName, WorkerLevel.valueOf(workerLevel), baseSalary, new Department(departmentName));
-		
+		Worker worker = new Worker(workerName, WorkerLevel.valueOf(workerLevel), baseSalary,
+				new Department(departmentName));
+		// --- > Worker é uma classe enumerada, logo há a necessidade de conversão de
+		// valores:
+		// --- > Deparment é uma classe, logo há a necessidade de instanciação da mesma
+		// mesma para receber os valores:
 
 		// -------------------------------------------------------------------- >
 		System.out.print("How many contracts to this worker? ");
@@ -42,9 +48,20 @@ public class Program {
 		// -------------------------------------------------------------------- >
 		for (int i = 1; i <= N; i++) {
 			System.out.println("Enter contract #" + i + " data:");
-			System.out.println("Date (DD/MM/YYYY): ");
+
+			System.out.print("Date (DD/MM/YYYY): ");
+			Date contractDate = sdf.parse(sc.next());
+
+			System.out.print("Value per hour: ");
+			double valuePerHour = sc.nextDouble();
+
+			System.out.print("Duration (hours):");
+			int hours = sc.nextInt();
 			
+			HourContract contract = new HourContract(contractDate, valuePerHour, hours);
 			
+			worker.addContract(contract);
+
 		}
 		// -------------------------------------------------------------------- >
 		// -------------------------------------------------------------------- >
